@@ -10,8 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SentryInterceptor = void 0;
-const common_1 = require("@nestjs/common");
 const operators_1 = require("rxjs/operators");
+const common_1 = require("@nestjs/common");
 const node_1 = require("@sentry/node");
 const sentry_service_1 = require("./sentry.service");
 let SentryInterceptor = class SentryInterceptor {

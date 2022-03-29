@@ -98,7 +98,6 @@
 import { AppController } from './app.controller';
 import { SentryModule } from "../sentry.module";
 &nbsp;
-import { LogLevel } from '@sentry/types';
 import { SentryService } from "../services";
 &nbsp;
 @Module({
@@ -106,7 +105,7 @@ import { SentryService } from "../services";
         dsn: 'https://6ec251b5d3674b5aabceb3166477e0c8@sentry.io/1512744',
         debug: true,
         environment: 'development',
-        logLevel: LogLevel.Debug,
+        logLevels: ['debug'],
     })],
     controllers: [AppController],
     providers: [

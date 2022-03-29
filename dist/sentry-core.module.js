@@ -19,8 +19,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SentryCoreModule = void 0;
 const common_1 = require("@nestjs/common");
 const sentry_constants_1 = require("./sentry.constants");
-const sentry_service_1 = require("./sentry.service");
 const sentry_providers_1 = require("./sentry.providers");
+const sentry_service_1 = require("./sentry.service");
 let SentryCoreModule = SentryCoreModule_1 = class SentryCoreModule {
     static forRoot(options) {
         const provider = (0, sentry_providers_1.createSentryProviders)(options);

@@ -237,7 +237,6 @@ export abstract class SentryBaseService extends Logger {}
 &nbsp;
 @Injectable()
 export class SentryService extends Logger {
-    app: string = '@ntegral/nestjs-sentry: ';
     constructor(
         @Inject(SENTRY_MODULE_OPTIONS)
         private readonly options?: SentryModuleOptions,
@@ -254,7 +253,7 @@ export class SentryService extends Logger {
           debug: options.debug === true ? false : <span class="branch-1 cbranch-no" title="branch not covered" >options.debug,</span>
           environment: options.environment,
           release: options.release,
-          logLevel: options.logLevel,
+          logLevels: options.logLevel,
           integrations: [
             new Sentry.Integrations.OnUncaughtException({
               onFatalError: (<span class="fstat-no" title="function not covered" >async (e</span>rr) =&gt;<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" > {</span></span>
@@ -269,7 +268,6 @@ export class SentryService extends Logger {
       }
 &nbsp;
   log(message: string, context?: string) {
-    message = `${this.app} ${message}`;
     try {
       Sentry.captureMessage(message, Sentry.Severity.Log);
       super.log(message, context);
@@ -277,7 +275,6 @@ export class SentryService extends Logger {
   }
 &nbsp;
   error(message: string, trace?: string, context?: string) {
-    message = `${this.app} ${message}`;
     try {
       Sentry.captureMessage(message, Sentry.Severity.Error);
       super.error(message, trace, context);
@@ -285,7 +282,6 @@ export class SentryService extends Logger {
   }
 &nbsp;
   warn(message: string, context?: string) {
-    message = `${this.app} ${message}`;
     try {
       Sentry.captureMessage(message, Sentry.Severity.Warning);
       super.warn(message, context);
@@ -293,7 +289,6 @@ export class SentryService extends Logger {
   }
 &nbsp;
   debug(message: string, context?: string) {
-    message = `${this.app} ${message}`;
     try {
       Sentry.captureMessage(message, Sentry.Severity.Debug);
       super.debug(message, context);
@@ -301,7 +296,6 @@ export class SentryService extends Logger {
   }
 &nbsp;
   verbose(message: string, context?: string) {
-    message = `${this.app} ${message}`;
     try {
       Sentry.captureMessage(message, Sentry.Severity.Info);
       super.verbose(message, context);

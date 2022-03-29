@@ -41,7 +41,6 @@ let SentryService = SentryService_1 = class SentryService extends common_1.Conso
     constructor(opts) {
         super();
         this.opts = opts;
-        this.app = '@ntegral/nestjs-sentry: ';
         if (!(opts && opts.dsn)) {
             return;
         }
@@ -69,23 +68,21 @@ let SentryService = SentryService_1 = class SentryService extends common_1.Conso
         return SentryService_1.serviceInstance;
     }
     log(message, context, asBreadcrumb) {
-        message = `${this.app} ${message}`;
         try {
             super.log(message, context);
-            asBreadcrumb ?
-                Sentry.addBreadcrumb({
+            asBreadcrumb
+                ? Sentry.addBreadcrumb({
                     message,
                     level: Sentry.Severity.Log,
                     data: {
-                        context
-                    }
-                }) :
-                Sentry.captureMessage(message, Sentry.Severity.Log);
+                        context,
+                    },
+                })
+                : Sentry.captureMessage(message, Sentry.Severity.Log);
         }
         catch (err) { }
     }
     error(message, trace, context) {
-        message = `${this.app} ${message}`;
         try {
             super.error(message, trace, context);
             Sentry.captureMessage(message, Sentry.Severity.Error);
@@ -93,50 +90,47 @@ let SentryService = SentryService_1 = class SentryService extends common_1.Conso
         catch (err) { }
     }
     warn(message, context, asBreadcrumb) {
-        message = `${this.app} ${message}`;
         try {
             super.warn(message, context);
-            asBreadcrumb ?
-                Sentry.addBreadcrumb({
+            asBreadcrumb
+                ? Sentry.addBreadcrumb({
                     message,
                     level: Sentry.Severity.Warning,
                     data: {
-                        context
-                    }
-                }) :
-                Sentry.captureMessage(message, Sentry.Severity.Warning);
+                        context,
+                    },
+                })
+                : Sentry.captureMessage(message, Sentry.Severity.Warning);
         }
         catch (err) { }
     }
     debug(message, context, asBreadcrumb) {
-        message = `${this.app} ${message}`;
         try {
             super.debug(message, context);
-            asBreadcrumb ?
-                Sentry.addBreadcrumb({
+            asBreadcrumb
+                ? Sentry.addBreadcrumb({
                     message,
                     level: Sentry.Severity.Debug,
                     data: {
-                        context
-                    }
-                }) :
-                Sentry.captureMessage(message, Sentry.Severity.Debug);
+                        context,
+                    },
+                })
+                : Sentry.captureMessage(message, Sentry.Severity.Debug);
         }
         catch (err) { }
     }
     verbose(message, context, asBreadcrumb) {
-        message = `${this.app} ${message}`;
         try {
             super.verbose(message, context);
-            asBreadcrumb ?
-                Sentry.addBreadcrumb({
+            asBreadcrumb
+                ? Sentry.addBreadcrumb({
                     message,
                     level: Sentry.Severity.Info,
                     data: {
-                        context
-                    }
-                }) :
-                Sentry.captureMessage(message, Sentry.Severity.Info);
+                        context,
+                    },
+                })
+                : Sentry.captureMessage(message, Sentry.Severity.Info);
         }
         catch (err) { }
     }

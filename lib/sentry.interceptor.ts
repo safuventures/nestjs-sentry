@@ -1,55 +1,56 @@
-// Nestjs imports
-import {
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { Injectable } from '@nestjs/common';
+import type {
   CallHandler,
   ExecutionContext,
-  Injectable,
-  NestInterceptor
+  NestInterceptor,
 } from '@nestjs/common';
-import { 
+import type {
   HttpArgumentsHost,
   WsArgumentsHost,
   RpcArgumentsHost,
-  ContextType
+  ContextType,
 } from '@nestjs/common/interfaces';
-// Rxjs imports
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-// Sentry imports
 import { Scope } from '@sentry/hub';
 import { Handlers } from '@sentry/node';
 
 import { SentryService } from './sentry.service';
-import { SentryInterceptorOptions, SentryInterceptorOptionsFilter } from './sentry.interfaces';
-
+import type {
+  SentryInterceptorOptions,
+  SentryInterceptorOptionsFilter,
+} from './sentry.interfaces';
 
 @Injectable()
 export class SentryInterceptor implements NestInterceptor {
-
-  protected readonly client: SentryService = SentryService.SentryServiceInstance()
-  constructor(
-    private readonly options?: SentryInterceptorOptions
-  ) {}
+  protected readonly client: SentryService =
+    SentryService.SentryServiceInstance();
+  constructor(private readonly options?: SentryInterceptorOptions) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     // first param would be for events, second is for errors
     return next.handle().pipe(
       tap(null, (exception) => {
-        if(this.shouldReport(exception)) {
+        if (this.shouldReport(exception)) {
           this.client.instance().withScope((scope) => {
             this.captureException(context, scope, exception);
-          })
+          });
         }
-      })
+      }),
     );
   }
 
-  protected captureException(context: ExecutionContext, scope: Scope, exception: any) {
+  protected captureException(
+    context: ExecutionContext,
+    scope: Scope,
+    exception: any,
+  ) {
     switch (context.getType<ContextType>()) {
       case 'http':
         return this.captureHttpException(
-          scope, 
-          context.switchToHttp(), 
-          exception
+          scope,
+          context.switchToHttp(),
+          exception,
         );
       case 'rpc':
         return this.captureRpcException(
@@ -58,19 +59,23 @@ export class SentryInterceptor implements NestInterceptor {
           exception,
         );
       case 'ws':
-        return this.captureWsException(
-          scope,
-          context.switchToWs(),
-          exception,
-        );
+        return this.captureWsException(scope, context.switchToWs(), exception);
     }
   }
 
-  private captureHttpException(scope: Scope, http: HttpArgumentsHost, exception: any): void {
-    const data = Handlers.parseRequest(<any>{},http.getRequest(), this.options);
+  private captureHttpException(
+    scope: Scope,
+    http: HttpArgumentsHost,
+    exception: any,
+  ): void {
+    const data = Handlers.parseRequest(
+      <any>{},
+      http.getRequest(),
+      this.options,
+    );
 
     scope.setExtra('req', data.request);
-    
+
     if (data.extra) scope.setExtras(data.extra);
     if (data.user) scope.setUser(data.user);
 
@@ -103,9 +108,9 @@ export class SentryInterceptor implements NestInterceptor {
 
     // If all filters pass, then we do not report
     if (this.options) {
-      const opts: SentryInterceptorOptions = this.options as {}
+      const opts: SentryInterceptorOptions = this.options as {};
       if (opts.filters) {
-        let filters: SentryInterceptorOptionsFilter[] = opts.filters
+        let filters: SentryInterceptorOptionsFilter[] = opts.filters;
         return filters.every(({ type, filter }) => {
           return !(exception instanceof type && (!filter || filter(exception)));
         });

@@ -1,8 +1,8 @@
-import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common';
 import { Observable } from 'rxjs';
+import type { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common';
 import { Scope } from '@sentry/hub';
 import { SentryService } from './sentry.service';
-import { SentryInterceptorOptions } from './sentry.interfaces';
+import type { SentryInterceptorOptions } from './sentry.interfaces';
 export declare class SentryInterceptor implements NestInterceptor {
     private readonly options?;
     protected readonly client: SentryService;
